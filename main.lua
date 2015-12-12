@@ -30,6 +30,7 @@ function love.load()
 
 	trashsprites = {Sprite.trash1, Sprite.trash2}
 	watersprites = {Sprite.water1}
+	stemsprites = {Sprite.stem1,Sprite.stem2,Sprite.stem3}
 
 	Gamestate.registerEvents() -- Find all gamestates
 	Gamestate.switch(menu)
