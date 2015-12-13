@@ -77,6 +77,8 @@ function throw()
 			if love.keyboard.isDown("right") then
 				if v.type == "trash" then
 					trashcount = trashcount + 1
+				else
+					misses = misses + 1
 				end
 				items[k] = nil
 				vaporate(v)

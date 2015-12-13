@@ -1,5 +1,6 @@
 require "lib/lovedebug" -- For live debugging
 require "lib/boundingbox" -- coll(x1,y1,w1,h1 x2,y2,w2,h2)
+highscore = require "lib/sick"
 Gamestate = require "lib/gamestate" -- For game states
 anim8 = require 'lib/anim8' -- For animations
 
@@ -32,6 +33,8 @@ function love.load()
 	trashsprites = {Sprite.trash1, Sprite.trash2}
 	watersprites = {Sprite.water1}
 	stemsprites = {Sprite.stem1,Sprite.stem2,Sprite.stem3}
+
+	highscore.set("highscore", 5, "Dummy", 3)
  	
 	justice = love.graphics.newFont("font/justice.ttf", 30)
 	love.graphics.setFont(justice)
