@@ -33,6 +33,7 @@ function love.load()
 	trashsprites = {Sprite.trash1, Sprite.trash2}
 	watersprites = {Sprite.water1}
 	stemsprites = {Sprite.stem1,Sprite.stem2,Sprite.stem3}
+	floorsprites = {Sprite.tile1, Sprite.tile2, Sprite.tile3, Sprite.tile4, Sprite.tile5, Sprite.tile6}
 
 	highscore.set("highscore", 5, "Dummy", 3)
  	

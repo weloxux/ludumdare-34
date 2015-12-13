@@ -66,7 +66,8 @@ function ruin() -- Gets called when trash gets thrown onto the plant
 		i = i + 1
 	end
 	if i ~= 0 then
-		succession[1] = nil
+--		succession[1] = nil
+		table.remove(succession, 1)
 	end
 	misses = misses + 1
 end
@@ -106,11 +107,21 @@ function level:enter(previous, ...)
 	local g = anim8.newGrid(10, 10, (10*4), 10)	  -- Red lightbulb is 10x10
 	bulbanim = anim8.newAnimation(g('1-4', 1), 0.15)
 
+	floor = {}
+	columns = (height / 40)
+	for i=1,columns do -- Put rows in the columns
+		newrow = {}
+		table.insert(floor, newrow)
+		for j=1,(width/40) do
+			newsprite = floorsprites[math.random(#floorsprites)]
+			table.insert(floor[i], newsprite)
+		end
+	end
+
 	-- Counters and stuff --
 	items = {}			-- Keeps track of items
 	inyourface = 0			-- Number of items you got IN YOUR FACE
 	succession = {}			-- Keeps track of the plant's parts
-	difficulty = 3			-- Difficulty (TODO: move to menu)
 	spawntimer = 0			-- Timer var for spawning
 	spawn_th = difficulty		-- Spawn threshold
 	speed = difficulty * 0.7	-- Item speed
@@ -168,6 +179,13 @@ function level:update(dt)
 end
 
 function level:draw()
+	-- Floor --
+	for i in pairs(floor) do
+		for j in pairs(floor[i]) do
+			love.graphics.draw(floor[i][j], (j - 1) * 40, (i - 1) * 40)
+		end
+	end
+
 	-- Debug --
 	love.graphics.print(spawntimer, 0, 0)
 	love.graphics.print(love.timer.getFPS( ), 0, 20)
