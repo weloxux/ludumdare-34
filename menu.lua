@@ -48,5 +48,5 @@ end
 function menu:draw()
 	love.graphics.draw(Sprite.menu, 0, 0)
 	love.graphics.printf("Press left to cycle, right to select", 30, 300, 800, center)
-	love.graphics.printf(string.sub(options[optionpointer], 3), 30, 330, 800, center)
+	love.graphics.printf(string.sub(options[optionpointer], 3, -3), 30, 330, 800, center)
 end
