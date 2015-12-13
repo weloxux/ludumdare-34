@@ -193,6 +193,6 @@ function level:draw()
 		love.graphics.draw (v.sprite, v.x, v.y)
 	end
 
-	love.graphics.draw(Sprite.expulsor, width/2-20, 560) 
+	love.graphics.draw(Sprite.expulsor, width/2-(Sprite.expulsor:getWidth() / 2), 520) 
 	bulbanim:draw(Anim.bulb, 410, 563)
 end
