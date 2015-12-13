@@ -1,6 +1,9 @@
 # Compiled Lua sources
 luac.out
 
+# Love files
+*.love
+
 # Swap files
 *.swp
 
