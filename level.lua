@@ -8,11 +8,7 @@ function itemupdate(item, dt) -- Move items
 	return item
 end
 
-
 function spawn_update(elapsed, spawn_th)
-	--while spawn_th > 0.5 do
-	--	spawn_th = spawn_th - 0.1 * spawn_th
-	--end
 	local grades = {{0, 3}, {10, 2.8}, {25, 2.6}, {40, 2.0}, {55, 1.7}, {65, 1.4}, {80, 1.2}, {95, 0.8}, {110, 0.5}}
 	for k,v in pairs(grades) do
 		if elapsed > v[1] and spawn_th > v[2] then
@@ -38,7 +34,7 @@ function spawn() -- Spawns in a random new item
 	end
 
 	if item.type == "trash" then
-		if math.random(1000) == 69 then -- Companion cube spawns with a chance of 1/1000
+		if math.random(500) == 69 then -- Companion cube spawns with a chance of 1/1000
 			item.sprite = Sprite.compcube
 		else
 			item.sprite = trashsprites[math.random(#trashsprites)]
@@ -57,7 +53,7 @@ function grow()
 end
 
 function vaporate(v) -- Gets called when water is thrown into the incinerator
-	vapor = {x = 510, y = 110}
+	vapor = {x = 520, y = 110}
 	if v.type == "water" then
 		love.audio.play(SFX.vaporize)
 		vapor.sprite = Sprite.vapor
@@ -100,12 +96,14 @@ function throw()
 				end
 			end
 		elseif v.y < 165 then
-			inyourface= inyourface + 1
+			inyourface = inyourface + 1
+			love.audio.play(SFX.inyourface)
+			lifes = lifes - 1
 			items[k] = nil
 		end
 	end
 end
-			
+
 function level:enter(previous, ...)
 	-- Animations --
 	local g = anim8.newGrid(80, 40, (80 * 4), 40) -- Belt is 80x40
@@ -137,7 +135,7 @@ function level:enter(previous, ...)
 	misses = 0			-- Amount of wrongfully thrown items
 	vapors = {}
 	elapsed = 0
-
+	lifes = 3
 	-- Constants --
 	mingrab = 175				-- Closest place items can be grabbed
 	maxgrab = 240				-- Farthest place items can be grabbed
@@ -145,9 +143,14 @@ function level:enter(previous, ...)
 	
 	-- Sound --
 	love.audio.stop() -- Stop previously playing music
+
+	-- Set volumes --
 	Mus.compost:setVolume(0.2)
 	SFX.vaporize:setVolume(0.2)
 	SFX.next:setVolume(0.2)
+	SFX.inyourface:setVolume(0.2)
+
+	-- Start background music --
 	Mus.compost:play()
 	Mus.compost:setLooping(true)
 	
@@ -165,6 +168,11 @@ function level:update(dt)
 	bulbanim:update(dt)
 	throw()
 	
+	-- Game over?--
+	if lifes == 0 then
+		Gamestate.switch(gameover)
+	end
+	
 	-- Item spawning
 	if spawntimer > spawn_th + difficulty then -- Spawn new items if necessary
 		spawn()
@@ -180,7 +188,7 @@ function level:update(dt)
 		end
 	end
 	for k,v in pairs(vapors)do
-		if v.y < 70 then
+		if v.y < 50 then
 			vapors[k] = nil
 		else
 			v.y = v.y - 3
@@ -214,6 +222,11 @@ function level:draw()
 		love.graphics.draw(v.sprite, v.x, v.y)
 	end
 
+	-- Draw hearths --
+	for i=1, lifes do 
+		love.graphics.draw(Sprite.heart, 600 +(i - 1) * 40, 50)
+	end
+		
 	-- Draw plant --
 	love.graphics.draw(Sprite.pot, potloc.x, potloc.y)
 	for k,v in pairs(succession) do

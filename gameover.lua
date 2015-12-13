@@ -29,9 +29,12 @@ function gameover:update(dt)
 end
 
 function gameover:draw()
-	for i, score, name in highscore() do
-		love.graphics.print(name, 50, i * 100)
-		love.graphics.print(score, 660, i * 100)
+	for i, tscore, tname in highscore() do
+		love.graphics.print("Your score:", 30, 20)
+		love.graphics.print(name, 50, 40)
+		love.graphics.print("Top score:", 30, 80)
+		love.graphics.print(tname, 50, 100)
+		love.graphics.print(tscore, 660, 100)
 	end
 
 	love.graphics.printf("Press R to restart", 190, 255, 800, center) -- Debug
