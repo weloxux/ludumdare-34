@@ -31,7 +31,7 @@ function love.load()
 	width, height = love.graphics.getDimensions() -- Get screen size
 
 	-- Prepare sprite lists --
-	trashsprites = {Sprite.trash1, Sprite.trash2}
+	trashsprites = {Sprite.trash1, Sprite.trash2, Sprite.trash3}
 	watersprites = {Sprite.water1}
 	stemsprites = {Sprite.stem1,Sprite.stem2,Sprite.stem3}
 	floorsprites = {Sprite.tile1, Sprite.tile2, Sprite.tile3, Sprite.tile4, Sprite.tile5, Sprite.tile6}
