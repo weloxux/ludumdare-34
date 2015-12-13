@@ -1,5 +1,8 @@
 function menu:enter(previous, ...)
-	
+	love.audio.stop() -- Stop previously playing music
+	Mus.bombombom:setVolume(0.2)
+	Mus.bombombom:play()
+	Mus.bombombom:setLooping(true)
 end
 
 function menu:update(dt)
@@ -9,5 +12,5 @@ function menu:update(dt)
 end
 
 function menu:draw()
-	love.graphics.print("Menu", 400, 300)
+	love.graphics.print("Menu", width / 2, 300) -- Debug
 end

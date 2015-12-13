@@ -23,13 +23,18 @@ end
 
 Anim = Proxy( function(k) return love.graphics.newImage("anim/"..k..".png") end)
 Sprite = Proxy( function(k) return love.graphics.newImage("spr/"..k..".png") end)
+Mus = Proxy(function(k) return love.audio.newSource(love.sound.newSoundData("mus/"..k..".wav")) end)
 
 function love.load()
-	width, height = love.graphics.getDimensions()
+	width, height = love.graphics.getDimensions() -- Get screen size
 
+	-- Prepare sprite lists --
 	trashsprites = {Sprite.trash1, Sprite.trash2}
 	watersprites = {Sprite.water1}
 	stemsprites = {Sprite.stem1,Sprite.stem2,Sprite.stem3}
+ 	
+	justice = love.graphics.newFont("font/justice.ttf", 30)
+	love.graphics.setFont(justice)
 
 	Gamestate.registerEvents() -- Find all gamestates
 	Gamestate.switch(menu)
