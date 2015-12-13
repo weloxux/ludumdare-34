@@ -9,9 +9,17 @@ function itemupdate(item, dt) -- Move items
 end
 
 
-function spawn_th ()
-	while spawn_th > 0.5 do
-		spawn_th = spawn_th - 0.00001 * spawn_th
+function spawn_update(elapsed, spawn_th)
+	--while spawn_th > 0.5 do
+	--	spawn_th = spawn_th - 0.1 * spawn_th
+	--end
+	local grades = {{0, 3}, {10, 2.8}, {25, 2.6}, {40, 2.0}, {55, 1.7}, {65, 1.4}, {80, 1.2}, {95, 0.8}, {110, 0.5}}
+	for k,v in pairs(grades) do
+		if elapsed > v[1] and spawn_th > v[2] then
+			print("hOI")
+			spawn_th = v[2]
+			love.audio.play(SFX.next)
+		end
 	end
 	return spawn_th
 end
@@ -51,10 +59,10 @@ end
 function vaporate(v) -- Gets called when water is thrown into the incinerator
 	vapor = {x = 510, y = 110}
 	if v.type == "water" then
-		-- sound needed
+		love.audio.play(SFX.vaporize)
 		vapor.sprite = Sprite.vapor
 	elseif v.type == "trash" then
-		--sound needed
+		love.audio.play(SFX.vaporize)
 		vapor.sprite = Sprite.smoke
 	end
 	table.insert(vapors, vapor)
@@ -123,20 +131,23 @@ function level:enter(previous, ...)
 	inyourface = 0			-- Number of items you got IN YOUR FACE
 	succession = {}			-- Keeps track of the plant's parts
 	spawntimer = 0			-- Timer var for spawning
-	spawn_th = difficulty		-- Spawn threshold
+	spawn_th = 3			-- Spawn threshold
 	speed = difficulty * 0.7	-- Item speed
 	trashcount = 0			-- Keep track of disposed garbage for stats
 	misses = 0			-- Amount of wrongfully thrown items
 	vapors = {}
+	elapsed = 0
 
 	-- Constants --
 	mingrab = 175				-- Closest place items can be grabbed
 	maxgrab = 240				-- Farthest place items can be grabbed
-	potloc = {x = width/2 - 150, y = 120}	-- Flower pot location
+	potloc = {x = width/2 - 150, y = 170}	-- Flower pot location
 	
 	-- Sound --
 	love.audio.stop() -- Stop previously playing music
-	Mus.compost:setVolume(0.1)
+	Mus.compost:setVolume(0.2)
+	SFX.vaporize:setVolume(0.2)
+	SFX.next:setVolume(0.2)
 	Mus.compost:play()
 	Mus.compost:setLooping(true)
 	
@@ -155,7 +166,7 @@ function level:update(dt)
 	throw()
 	
 	-- Item spawning
-	if spawntimer > spawn_th then -- Spawn new items if necessary
+	if spawntimer > spawn_th + difficulty then -- Spawn new items if necessary
 		spawn()
 		spawntimer = 0
 	end
@@ -175,7 +186,9 @@ function level:update(dt)
 			v.y = v.y - 3
 		end
 	end
-	spawntimer = spawntimer + dt
+	spawn_th = spawn_update(elapsed, spawn_th)
+	elapsed = elapsed + dt
+	spawntimer = spawntimer + (2 * dt)
 end
 
 function level:draw()
@@ -188,7 +201,8 @@ function level:draw()
 
 	-- Debug --
 	love.graphics.print(spawntimer, 0, 0)
-	love.graphics.print(love.timer.getFPS( ), 0, 20)
+	love.graphics.print(elapsed, 0, 40)
+	love.graphics.print(spawn_th, 0, 20)
 
 	-- Draw belt --
 	for k,v in pairs(beltparts) do
@@ -206,8 +220,11 @@ function level:draw()
 		local ypos = potloc.y - 40 - (40 * (k - 1))
 		love.graphics.draw(v, potloc.x, ypos)
 	end
+	love.graphics.draw(Sprite.top, potloc.x, potloc.y - 40 - (40 * #succession))
 
 	-- Draw etc. --
+	love.graphics.draw(Sprite.char, (width / 2) - (Sprite.char:getWidth() / 2), 120)
+
 	incanim:draw(Anim.inc, 500, 120)
 	for k,v in pairs(vapors) do
 		love.graphics.draw (v.sprite, v.x, v.y)

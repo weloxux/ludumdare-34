@@ -25,6 +25,7 @@ end
 Anim = Proxy( function(k) return love.graphics.newImage("anim/"..k..".png") end)
 Sprite = Proxy( function(k) return love.graphics.newImage("spr/"..k..".png") end)
 Mus = Proxy(function(k) return love.audio.newSource(love.sound.newSoundData("mus/"..k..".wav")) end)
+SFX = Proxy(function(k) return love.audio.newSource(love.sound.newSoundData("snd/"..k..".wav")) end)
 
 function love.load()
 	width, height = love.graphics.getDimensions() -- Get screen size
@@ -35,10 +36,11 @@ function love.load()
 	stemsprites = {Sprite.stem1,Sprite.stem2,Sprite.stem3}
 	floorsprites = {Sprite.tile1, Sprite.tile2, Sprite.tile3, Sprite.tile4, Sprite.tile5, Sprite.tile6}
 
-	highscore.set("highscore", 5, "Dummy", 3)
+	highscore.set("highscore", 1, "Wow you suck.", -1000)
  	
-	justice = love.graphics.newFont("font/justice.ttf", 30)
-	love.graphics.setFont(justice)
+	font = love.graphics.newFont("font/justice.ttf", 23)
+	bigfont = love.graphics.newFont("font/justice.ttf", 35)
+	love.graphics.setFont(font)
 
 	Gamestate.registerEvents() -- Find all gamestates
 	Gamestate.switch(menu)
