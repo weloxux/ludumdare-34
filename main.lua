@@ -2,7 +2,6 @@ require "lib/lovedebug" -- For live debugging
 require "lib/boundingbox" -- coll(x1,y1,w1,h1 x2,y2,w2,h2)
 Gamestate = require "lib/gamestate" -- For game states
 anim8 = require 'lib/anim8' -- For animations
-require "util"
 
 -- Define gamestates
 menu = {}

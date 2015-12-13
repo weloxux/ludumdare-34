@@ -31,8 +31,7 @@ function spawn() -- Spawns in a random new item
 	end
 
 	if item.type == "trash" then
---		if math.random(1000) == 69 then -- Companion cube spawns with a chance of 1/1000
-		if math.random(3) == 1 then -- Companion cube spawns with a chance of 1/1000
+		if math.random(1000) == 69 then -- Companion cube spawns with a chance of 1/1000
 			item.sprite = Sprite.compcube
 		else
 			item.sprite = trashsprites[math.random(#trashsprites)]
@@ -49,7 +48,39 @@ function grow()
 	math.randomseed(seed)
 	table.insert(succession, stemsprites[math.random(#stemsprites)])
 end
- 
+
+function vaporate() -- Gets called when water is thrown into the incinerator
+
+end
+
+function ruin() -- Gets called when trash gets thrown onto the plant
+
+end
+
+function throw()
+	for k,v in pairs(items) do
+		if v.y < maxgrab and v.y > mingrab then
+			if love.keyboard.isDown("right") then
+				if v.type == "water" then
+					vaporate()
+				end
+				trashcount = trashcount + 1
+				items[k] = nil
+			elseif love.keyboard.isDown("left") then
+				if v.type == "water" then
+					grow()
+				else
+					ruin()
+				end
+				items[k] = nil
+			end
+		elseif v.y < 165 then
+			inyourface= inyourface + 1
+			items[k] = nil
+		end
+	end
+end
+			
 function level:enter(previous, ...)
 	-- Animations --
 	local g = anim8.newGrid(80, 40, (80 * 4), 40) -- Belt is 80x40
@@ -58,23 +89,24 @@ function level:enter(previous, ...)
 	incanim = anim8.newAnimation(g('1-3',1), 0.15)
 
 	-- Counters and stuff --
-	items = {}
-	succession = {}
-	pile_direction = 0
-	difficulty = 3 -- TEMPORARILY HERE
-	spawntimer = 0
-	spawn_th = difficulty
-	speed = difficulty * 0.7
+	items = {}			-- Keeps track of items
+	inyourface = 0			-- Number of items you got IN YOUR FACE
+	succession = {}			-- Keeps track of the plant's parts
+	difficulty = 3			-- Difficulty (TODO: move to menu)
+	spawntimer = 0			-- Timer var for spawning
+	spawn_th = difficulty		-- Spawn threshold
+	speed = difficulty * 0.7	-- Item speed
+	trashcount = 0			-- Keep track of disposed garbage for stats
 
 	-- Constants --
-	mingrab = 200
-	maxgrab = 280
-	potloc = {x = width/2 - 150, y = 120}
+	mingrab = 175				-- Closest place items can be grabbed
+	maxgrab = 240				-- Farthest place items can be grabbed
+	potloc = {x = width/2 - 150, y = 120}	-- Flower pot location
 
 	-- Build up conveyor belt --
 	beltparts = {}
 	for i=0,9 do -- Add the whole of the conveyor belt
-		table.insert(beltparts, {x = width/2-40, y = (i * 40) + mingrab}) -- Figure this one out yourself, schmuck
+		table.insert(beltparts, {x = width/2-40, y = (i * 40) + 200}) -- Figure this one out yourself, schmuck
 	end
 end
 
@@ -83,14 +115,7 @@ function level:update(dt)
 	beltanim:update(dt)
 	incanim:update(dt)
 
-	-- Controls --
-	if love.keyboard.isDown("right") then
-		pile_direction = 1
-	elseif love.keyboard.isDown("left") then
-		pile_direction = 2
-	else 
-		pile_direction = 0
-	end
+	throw()
 	
 	-- Item spawning
 	if spawntimer > spawn_th then -- Spawn new items if necessary
@@ -106,6 +131,7 @@ function level:update(dt)
 			items[k] = nil
 		end
 	end
+
 	spawntimer = spawntimer + dt
 end
 
