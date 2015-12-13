@@ -12,7 +12,7 @@ function gameover:enter(previous, ...)
 	love.audio.stop() -- Stop previously playing music
 	whoami(difficulty)
 	print ("Name: " .. name)
-	local score = #succession - misses
+	local score = #succession - misses - inyourface
 	highscore.add(name, score)
 	highscore.save()
 	Mus.overgrown:setVolume(0.2)
