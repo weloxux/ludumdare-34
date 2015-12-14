@@ -1,0 +1,5 @@
+* Move menu text [DANIEL]
+* Change difficulty [MARNIX]
+* Introduction
+* Add wall
+* Plant grow sound
