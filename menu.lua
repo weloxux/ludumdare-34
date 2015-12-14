@@ -6,18 +6,23 @@ function menu:enter(previous, ...)
 
 	optionpointer = 1
 	options = {"o_start()", "o_difficulty()", "o_exit()"}
-	difficultyl = {0.9,0.5,0}
+	difficultyl = {0.9,0.5,0.1}
 	difficulty = 2
-	SFX.DEATHWISH:setVolume(2.8)
+	SFX.DEATHWISH:setVolume(2.2)
+
+	name = "Difficulty: hard" -- Set initial value to avoid nils
 end
 
 function o_start() -- Start the game
 	difficulty = difficultyl[difficulty]
-	Gamestate.switch(level)
+	if name == "DEATH WISH" then
+		Gamestate.switch(deathwish)
+	else
+		Gamestate.switch(intro)
+	end
 end
 
 function o_difficulty() -- Set the difficulty
-	print(difficulty .. " " .. #difficultyl)
 	if difficulty < #difficultyl then
 		difficulty = difficulty + 1
 	else
@@ -30,6 +35,8 @@ function o_exit() -- Quit
 end
 
 function menu:keypressed(key, code)
+	local names = {"Difficulty: normal", "Difficulty: hard", "DEATH WISH"}
+	name = names[difficulty]
 	if key == "right" then
 		loadstring(options[optionpointer])()
 	end
@@ -49,7 +56,6 @@ end
 
 function menu:draw()
 	local difs = {"normal", "hard", "DEATH WISH"}
-	local names = {"Difficulty: normal", "Difficulty: hard", "DEATH WISH"}
 	love.graphics.draw(Sprite.menu, 0, 0)
 	love.graphics.printf("Press left to cycle, right to select", 0, 400, 799, "center")
 
@@ -58,7 +64,7 @@ function menu:draw()
 
 	if optionpointer == 2 then
 		love.graphics.printf(difs[difficulty], 0, 455, 800, "center")
-		name = names[difficulty]
 	end
 	love.graphics.setFont(font)
+
 end

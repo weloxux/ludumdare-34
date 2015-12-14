@@ -1,16 +1,18 @@
-* Change difficulty [MARNIX]
-* Introduction
-* Plant grow sound [DANIEL]
-* Increase chance of water [MARNIX]
-* Make speed depend on difficulty [MARNIX]
+* Introduction [MARNIX]
 
 OPTIONAL
 ========
 * Add decorations
 * Powerups
+* Exit door decoration
 * DEATH WISH theme
 
 DONE
 ====
 * Move menu text [DANIEL]
 * Add wall [MARNIX]
+* Increase chance of water [MARNIX]
+* Make speed depend on difficulty [MARNIX]
+* Change difficulty [MARNIX]
+* Fix evaporate sound effect not playing (too long) [MARNIX]
+* Plant grow sound [DANIEL]

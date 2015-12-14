@@ -18,14 +18,20 @@ function gameover:enter(previous, ...)
 	Mus.overgrown:setVolume(0.15)
 	Mus.overgrown:play()
 	Mus.overgrown:setLooping(true)
+	love.timer.sleep(0.3)
+end
+
+function gameover:keypressed(key, code)
+	if key == "right" then
+		Gamestate.switch(level)
+	elseif key == "escape" then
+		love.event.quit()
+	elseif key == "left" then
+		Gamestate.switch(menu)
+	end
 end
 
 function gameover:update(dt)
-	if love.keyboard.isDown("r") then
-		Gamestate.switch(level)
-	elseif love.keyboard.isDown("escape") then
-		love.event.quit()
-	end
 end
 
 function gameover:draw()
@@ -38,7 +44,8 @@ function gameover:draw()
 		love.graphics.print(tscore, 660, 100)
 	end
 
-	love.graphics.printf("Press R to restart", 30, 255, 800, center) -- Debug
+	love.graphics.printf("Press right to restart", 0, 300, 799, "center")
+	love.graphics.printf("Press left to return to menu", 0, 320, 799, "center")
 --	love.graphics.printf("What to press to escape??", 80, 395, 800, center)
 --	love.graphics.printf("You´ll be trapped in here forever!", 50, 450, 800, center)
 end

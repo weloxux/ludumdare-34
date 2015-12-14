@@ -6,11 +6,15 @@ anim8 = require 'lib/anim8' -- For animations
 
 -- Define gamestates
 menu = {}
+deathwish = {}
+intro = {}
 level = {}
 gameover = {}
 
 -- Require our gamestates
 require "menu"
+require "deathwish"
+require "intro"
 require "level"
 require "gameover"
 
@@ -41,6 +45,7 @@ function love.load()
  	
 	font = love.graphics.newFont("font/justice.ttf", 23)
 	bigfont = love.graphics.newFont("font/justice.ttf", 35)
+	introfont = love.graphics.newFont("font/Terminus.ttf", 35)
 	love.graphics.setFont(font)
 
 	Gamestate.registerEvents() -- Find all gamestates

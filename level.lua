@@ -12,7 +12,6 @@ function spawn_update(elapsed, spawn_th)
 	local grades = {{0, 3}, {10, 2.8}, {25, 2.6}, {40, 2.0}, {55, 1.7}, {65, 1.4}, {80, 1.2}, {95, 0.8}, {110, 0.5}}
 	for k,v in pairs(grades) do
 		if elapsed > v[1] and spawn_th > v[2] then
-			print("hOI")
 			spawn_th = v[2]
 			love.audio.play(SFX.next)
 		end
@@ -20,21 +19,21 @@ function spawn_update(elapsed, spawn_th)
 	return spawn_th
 end
 		
-function spawn() -- Spawns in a random new item
-	local seed = os.time()
+function spawn(dt) -- Spawns in a random new item
+	local seed = os.time() * dt
 	math.randomseed(seed)
 
-	item = {x = width/2-20, y = 600}
+	item = {x = width/2-20, y = 600 - 40}
 
-	local ptype = math.random(9)
-	if ptype <= 2 then
+	local ptype = math.random(3)
+	if ptype <= 1 then
 		item.type = "water"
 	else
 		item.type = "trash"
 	end
 
 	if item.type == "trash" then
-		if math.random(500) == 69 then -- Companion cube spawns with a chance of 1/1000
+		if math.random(500) == 69 then -- Companion cube spawns with a chance of 1/500
 			item.sprite = Sprite.compcube
 		else
 			item.sprite = trashsprites[math.random(#trashsprites)]
@@ -42,6 +41,8 @@ function spawn() -- Spawns in a random new item
 	elseif item.type == "water" then
 		item.sprite = watersprites[math.random(#watersprites)]
 	end
+
+	print(item.type .. " ")
 	
 	table.insert(items, item)
 end
@@ -77,30 +78,38 @@ function ruin() -- Gets called when trash gets thrown onto the plant
 	misses = misses + 1
 end
 
-function throw()
+function level:keypressed(key, code)
+	throw(key)
+end
+
+function throw(key)
 	for k,v in pairs(items) do
-		if v.y < maxgrab and v.y > mingrab then
-			if love.keyboard.isDown("right") then
-				if v.type == "trash" then
-					trashcount = trashcount + 1
-				else
-					misses = misses + 1
-				end
-				items[k] = nil
-				vaporate(v)
-			elseif love.keyboard.isDown("left") then
-				items[k] = nil
-				if v.type == "water" then
-					grow()
-				else
-					ruin()
+		if key ~= nil then
+			if v.y < maxgrab and v.y > mingrab then
+				if k == 1 then -- REMOVE ME IF INCORRECT
+					if key == "right" then
+						if v.type == "trash" then
+							trashcount = trashcount + 1
+						else
+							misses = misses + 1
+						end
+						table.remove(items, 1)
+						vaporate(v)
+					elseif key == "left" then
+						table.remove(items, 1)
+						if v.type == "water" then
+							grow()
+						else
+							ruin()
+						end
+					end
 				end
 			end
 		elseif v.y < 165 then
 			inyourface = inyourface + 1
 			love.audio.play(SFX.inyourface)
 			lifes = lifes - 1
-			items[k] = nil
+			table.remove(items, k)
 		end
 	end
 end
@@ -113,10 +122,6 @@ function level:enter(previous, ...)
 	incanim = anim8.newAnimation(g('1-3',1), 0.15)
 	local g = anim8.newGrid(10, 10, (10*4), 10)	  -- Red lightbulb is 10x10
 	bulbanim = anim8.newAnimation(g('1-4', 1), 0.15)
-	if name == "DEATH WISH" then
-		love.audio.play(SFX.DEATHWISH)
-	end
-	love.timer.sleep(3)
 
 	floor = {}
 	columns = (height / 40)
@@ -145,8 +150,13 @@ function level:enter(previous, ...)
 	inyourface = 0			-- Number of items you got IN YOUR FACE
 	succession = {}			-- Keeps track of the plant's parts
 	spawntimer = 0			-- Timer var for spawning
-	spawn_th = 3			-- Spawn threshold
-	speed = difficulty * 0.7	-- Item speed
+	if name ~= "DEATH WISH" then
+		spawn_th = 3		-- Spawn threshold
+		speed = 3 - difficulty 		-- Item speed
+	else
+		spawn_th = 1.4
+		speed = 5 		-- Item speed
+	end
 	trashcount = 0			-- Keep track of disposed garbage for stats
 	misses = 0			-- Amount of wrongfully thrown items
 	vapors = {}
@@ -154,8 +164,8 @@ function level:enter(previous, ...)
 	lifes = 3
 	-- Constants --
 	mingrab = 175				-- Closest place items can be grabbed
-	maxgrab = 240				-- Farthest place items can be grabbed
-	potloc = {x = width/2 - 150, y = 170}	-- Flower pot location
+	maxgrab = 260				-- Farthest place items can be grabbed
+	potloc = {x = width/2 - 150, y = 200}--170}	-- Flower pot location
 	
 	-- Sound --
 	love.audio.stop() -- Stop previously playing music
@@ -192,7 +202,7 @@ function level:update(dt)
 	
 	-- Item spawning
 	if spawntimer > spawn_th + difficulty then -- Spawn new items if necessary
-		spawn()
+		spawn(dt)
 		spawntimer = 0
 	end
 
@@ -241,14 +251,17 @@ function level:draw()
 		beltanim:draw(Anim.belt, v.x, v.y)
 	end
 
+	love.graphics.draw(Sprite.expulsor, width/2-(Sprite.expulsor:getWidth() / 2), 520) 
+	bulbanim:draw(Anim.bulb, 410, 563)
+
 	-- Draw items --
 	for k,v in pairs(items) do
 		love.graphics.draw(v.sprite, v.x, v.y)
 	end
 
-	-- Draw hearths --
+	-- Draw hearts --
 	for i=1, lifes do 
-		love.graphics.draw(Sprite.heart, 640 +(i - 1) * 40, 20)
+		love.graphics.draw(Sprite.heart, 660 +(i - 1) * 40, 20)
 	end
 		
 	-- Draw plant --
@@ -267,6 +280,4 @@ function level:draw()
 		love.graphics.draw (v.sprite, v.x, v.y)
 	end
 
-	love.graphics.draw(Sprite.expulsor, width/2-(Sprite.expulsor:getWidth() / 2), 520) 
-	bulbanim:draw(Anim.bulb, 410, 563)
 end
