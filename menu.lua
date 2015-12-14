@@ -6,8 +6,9 @@ function menu:enter(previous, ...)
 
 	optionpointer = 1
 	options = {"o_start()", "o_difficulty()", "o_exit()"}
-	difficultyl = {3,2,1}
+	difficultyl = {0.9,0.5,0}
 	difficulty = 2
+	SFX.DEATHWISH:setVolume(2.8)
 end
 
 function o_start() -- Start the game
@@ -47,15 +48,17 @@ function menu:update(dt)
 end
 
 function menu:draw()
-	local difs = {"easy", "normal", "hard"}
+	local difs = {"normal", "hard", "DEATH WISH"}
+	local names = {"Difficulty: normal", "Difficulty: hard", "DEATH WISH"}
 	love.graphics.draw(Sprite.menu, 0, 0)
-	love.graphics.printf("Press left to cycle, right to select", 30, 400, 800, center)
+	love.graphics.printf("Press left to cycle, right to select", 0, 400, 799, "center")
 
 	love.graphics.setFont(bigfont)
-	love.graphics.printf(string.sub(options[optionpointer], 3, -3), 30, 430, 800, center)
+	love.graphics.printf(string.sub(options[optionpointer], 3, -3), 0, 430, 799, "center")
 
 	if optionpointer == 2 then
-		love.graphics.printf(difs[difficulty], 30, 455, 800, center)
+		love.graphics.printf(difs[difficulty], 0, 455, 800, "center")
+		name = names[difficulty]
 	end
 	love.graphics.setFont(font)
 end

@@ -47,6 +47,7 @@ function spawn() -- Spawns in a random new item
 end
 
 function grow()
+	love.audio.play(SFX.grow)
 	local seed = os.time()
 	math.randomseed(seed)
 	table.insert(succession, stemsprites[math.random(#stemsprites)])
@@ -112,6 +113,10 @@ function level:enter(previous, ...)
 	incanim = anim8.newAnimation(g('1-3',1), 0.15)
 	local g = anim8.newGrid(10, 10, (10*4), 10)	  -- Red lightbulb is 10x10
 	bulbanim = anim8.newAnimation(g('1-4', 1), 0.15)
+	if name == "DEATH WISH" then
+		love.audio.play(SFX.DEATHWISH)
+	end
+	love.timer.sleep(3)
 
 	floor = {}
 	columns = (height / 40)
@@ -121,6 +126,17 @@ function level:enter(previous, ...)
 		for j=1,(width/40) do
 			newsprite = floorsprites[math.random(#floorsprites)]
 			table.insert(floor[i], newsprite)
+		end
+	end
+
+	-- 100
+	wall = {}
+	for i=1,(width/40) do -- Delicious spaghetti
+		newrow = {}
+		table.insert(wall, newrow)
+		for j=1,4 do
+			newsprite = wallsprites[math.random(#wallsprites)]
+			table.insert(wall[i], newsprite)
 		end
 	end
 
@@ -149,6 +165,7 @@ function level:enter(previous, ...)
 	SFX.vaporize:setVolume(0.2)
 	SFX.next:setVolume(0.2)
 	SFX.inyourface:setVolume(0.2)
+	SFX.grow:setVolume(0.2)
 
 	-- Start background music --
 	Mus.compost:play()
@@ -207,6 +224,13 @@ function level:draw()
 		end
 	end
 
+	-- Wall --
+	for i in pairs(wall) do
+		for j in pairs(wall[i]) do
+			love.graphics.draw(wall[i][j], (i - 1) * 40, -20 + ((j - 1) * 40))
+		end
+	end
+
 	-- Debug --
 	love.graphics.print(spawntimer, 0, 0)
 	love.graphics.print(elapsed, 0, 40)
@@ -224,7 +248,7 @@ function level:draw()
 
 	-- Draw hearths --
 	for i=1, lifes do 
-		love.graphics.draw(Sprite.heart, 600 +(i - 1) * 40, 50)
+		love.graphics.draw(Sprite.heart, 640 +(i - 1) * 40, 20)
 	end
 		
 	-- Draw plant --

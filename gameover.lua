@@ -1,4 +1,4 @@
-function whoami(difficulty)
+--[[function whoami(difficulty)
 	if difficulty == 1 then
 		name = "Difficulty: Flying Garbage"
 	elseif  difficulty == 2 then
@@ -6,11 +6,11 @@ function whoami(difficulty)
 	elseif difficulty == 3 then
 		name = "Difficulty: Greenling"
 	end
-end
+end]]--
 
 function gameover:enter(previous, ...)
 	love.audio.stop() -- Stop previously playing music
-	whoami(difficulty)
+	--whoami(difficulty)
 	print ("Name: " .. name)
 	lscore = (#succession * 100) - (misses * 100) - (inyourface * 100)
 	highscore.add(name, lscore)

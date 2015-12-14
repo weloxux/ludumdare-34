@@ -35,8 +35,9 @@ function love.load()
 	watersprites = {Sprite.water1}
 	stemsprites = {Sprite.stem1,Sprite.stem2,Sprite.stem3}
 	floorsprites = {Sprite.tile1, Sprite.tile2, Sprite.tile3, Sprite.tile4, Sprite.tile5, Sprite.tile6}
+	wallsprites = {Sprite.wall1, Sprite.wall2}
 
-	highscore.set("highscore", 1, "Wow you suck.", -1000)
+	highscore.set("highscore", 1, "Wow you suck.", -100000)
  	
 	font = love.graphics.newFont("font/justice.ttf", 23)
 	bigfont = love.graphics.newFont("font/justice.ttf", 35)
