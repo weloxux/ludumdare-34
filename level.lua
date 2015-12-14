@@ -169,8 +169,8 @@ function level:enter(previous, ...)
 	love.audio.stop() -- Stop previously playing music
 
 	-- Set volumes --
-	Mus.compost:setVolume(0.25)
-	SFX.vaporize:setVolume(0.2)
+	Mus.compost:setVolume(0.3)
+	SFX.vaporize:setVolume(0.15)
 	SFX.next:setVolume(0.2)
 	SFX.inyourface:setVolume(0.3)
 	SFX.grow:setVolume(0.2)

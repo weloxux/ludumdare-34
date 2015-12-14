@@ -10,7 +10,7 @@ function intro:enter(previous, ...)
 			table.insert(bwalls[i], newsprite)
 		end
 	end
-	introtext = "It is the year 21XX. You are NAMEHERE, a dangerous criminal that robs garbage containers with his evil, antagonistical, horRIBLE, HORRENDOUS plant growing skills, instead of using his green fingers for the greater good. However, in your terrible quest of terror, you seem to have been caught by the plantlice (ouch, terrible), and you have been jailed up. Your day task consists of throwing garbage in the incinerator, but, being the powerful super villain you definitely are, you have devised a plan(t). Instead of throwing all garbage in the garbage container, you're going to throw all trash containing water ON A NEARBY PLANT. That's right, what a twist. You'll then be able to escape over the prison walls."
+	introtext = "It is the year 21XX. You are Fernando Fertilizer, a dangerous criminal that robs garbage containers with his evil, antagonistical, horRIBLE, HORRENDOUS plant growing skills, instead of using his green fingers for the greater good. However, in your terrible quest of terror, you seem to have been caught by the plantlice (ouch, worst pun I've ever made. oops, fourth wall), and you have been jailed up. Your day task consists of throwing garbage in the incinerator, but, being the powerful super villain you definitely are, you have devised a plan(t). Instead of throwing all garbage in the garbage container, you're going to throw all trash containing water ON A NEARBY PLANT. That's right, what a twist. You'll then be able to escape over the prison walls."
 	texttimer = 0
 	textloc = height
 	love.graphics.setFont(introfont)
