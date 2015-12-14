@@ -1,6 +1,6 @@
 function itemupdate(item, dt) -- Move items
 	speed = speed + (dt * dt * 2)
-	if speed < difficulty * 20 then
+	if speed < 15 then
 		item.y = item.y - speed
 	else
 		item.y = item.y - difficulty * 20
@@ -9,7 +9,7 @@ function itemupdate(item, dt) -- Move items
 end
 
 function spawn_update(elapsed, spawn_th)
-	local grades = {{0, 3}, {10, 2.8}, {25, 2.6}, {40, 2.0}, {55, 1.7}, {65, 1.4}, {80, 1.2}, {95, 0.8}, {110, 0.5}}
+	local grades = {{0, 2.8}, {10, 2.6}, {20, 2.2}, {35, 1.8}, {45, 1.4}, {60, 1.1}, {75, 0.8}, {95, 0.5}, {105, 0.1}}
 	for k,v in pairs(grades) do
 		if elapsed > v[1] and spawn_th > v[2] then
 			spawn_th = v[2]
@@ -23,7 +23,7 @@ function spawn(dt) -- Spawns in a random new item
 	local seed = os.time() * dt
 	math.randomseed(seed)
 
-	item = {x = width/2-20, y = 600 - 40}
+	item = {x = width/2-20, y = 600}
 
 	local ptype = math.random(3)
 	if ptype <= 1 then
@@ -42,8 +42,6 @@ function spawn(dt) -- Spawns in a random new item
 		item.sprite = watersprites[math.random(#watersprites)]
 	end
 
-	print(item.type .. " ")
-	
 	table.insert(items, item)
 end
 
@@ -152,10 +150,10 @@ function level:enter(previous, ...)
 	spawntimer = 0			-- Timer var for spawning
 	if name ~= "DEATH WISH" then
 		spawn_th = 3		-- Spawn threshold
-		speed = 3 - difficulty 		-- Item speed
+		speed = 6 - difficulty 		-- Item speed
 	else
 		spawn_th = 1.4
-		speed = 5 		-- Item speed
+		speed = 8 		-- Item speed
 	end
 	trashcount = 0			-- Keep track of disposed garbage for stats
 	misses = 0			-- Amount of wrongfully thrown items
@@ -171,10 +169,10 @@ function level:enter(previous, ...)
 	love.audio.stop() -- Stop previously playing music
 
 	-- Set volumes --
-	Mus.compost:setVolume(0.2)
+	Mus.compost:setVolume(0.25)
 	SFX.vaporize:setVolume(0.2)
 	SFX.next:setVolume(0.2)
-	SFX.inyourface:setVolume(0.2)
+	SFX.inyourface:setVolume(0.3)
 	SFX.grow:setVolume(0.2)
 
 	-- Start background music --
@@ -242,9 +240,9 @@ function level:draw()
 	end
 
 	-- Debug --
-	love.graphics.print(spawntimer, 0, 0)
-	love.graphics.print(elapsed, 0, 40)
-	love.graphics.print(spawn_th, 0, 20)
+--	love.graphics.print(spawntimer, 0, 0)
+--	love.graphics.print(elapsed, 0, 40)
+--	love.graphics.print(spawn_th, 0, 20)
 
 	-- Draw belt --
 	for k,v in pairs(beltparts) do
@@ -252,7 +250,6 @@ function level:draw()
 	end
 
 	love.graphics.draw(Sprite.expulsor, width/2-(Sprite.expulsor:getWidth() / 2), 520) 
-	bulbanim:draw(Anim.bulb, 410, 563)
 
 	-- Draw items --
 	for k,v in pairs(items) do
@@ -272,6 +269,12 @@ function level:draw()
 	end
 	love.graphics.draw(Sprite.top, potloc.x, potloc.y - 40 - (40 * #succession))
 
+	-- Draw garbage cans --
+	love.graphics.draw(Sprite.trash1, 623, 450)
+	love.graphics.draw(Sprite.trash1, 667, 456)
+	love.graphics.draw(Sprite.trash1, 704, 448)
+	love.graphics.draw(Sprite.trash1, 111, 311)
+
 	-- Draw etc. --
 	love.graphics.draw(Sprite.char, (width / 2) - (Sprite.char:getWidth() / 2), 120)
 
@@ -280,4 +283,6 @@ function level:draw()
 		love.graphics.draw (v.sprite, v.x, v.y)
 	end
 
+	love.graphics.draw(Sprite.overlay, width/2-(Sprite.overlay:getWidth() / 2), 536) 
+	bulbanim:draw(Anim.bulb, 395, 573)
 end

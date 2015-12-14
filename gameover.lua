@@ -18,20 +18,23 @@ function gameover:enter(previous, ...)
 	Mus.overgrown:setVolume(0.15)
 	Mus.overgrown:play()
 	Mus.overgrown:setLooping(true)
-	love.timer.sleep(0.3)
+	gotimer = 0
 end
 
 function gameover:keypressed(key, code)
-	if key == "right" then
-		Gamestate.switch(level)
-	elseif key == "escape" then
-		love.event.quit()
-	elseif key == "left" then
-		Gamestate.switch(menu)
+	if gotimer > 2 then
+		if key == "right" then
+			Gamestate.switch(level)
+		elseif key == "escape" then
+			love.event.quit()
+		elseif key == "left" then
+			Gamestate.switch(menu)
+		end
 	end
 end
 
 function gameover:update(dt)
+	gotimer = gotimer + dt
 end
 
 function gameover:draw()
