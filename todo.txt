@@ -1,5 +1,16 @@
-* Move menu text [DANIEL]
-* Change difficulty
+* Change difficulty [MARNIX]
 * Introduction
+* Plant grow sound [DANIEL]
+* Increase chance of water [MARNIX]
+* Make speed depend on difficulty [MARNIX]
+
+OPTIONAL
+========
+* Add decorations
+* Powerups
+* DEATH WISH theme
+
+DONE
+====
+* Move menu text [DANIEL]
 * Add wall [MARNIX]
-* Plant grow sound 
